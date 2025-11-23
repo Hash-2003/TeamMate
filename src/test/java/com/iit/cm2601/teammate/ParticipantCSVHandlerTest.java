@@ -21,7 +21,7 @@ public class ParticipantCSVHandlerTest {
 
             participants.stream()
                     .limit(3)
-                    .forEach(p -> System.out.println(p.getId() + " | " + p.getName() + " | " + p.getPreferredGame() + " | " + p.getPreferredRole() + " | " + p.getPersonalityType()));
+                    .forEach(p -> System.out.println(p.getId() + " | " + p.getName() + " | " + p.getEmail() + " | " + p.getPreferredGame() + " | " + p.getSkillLevel() + " | " + p.getPreferredRole() + " | " +p.getPersonalityScore() + " | " + p.getPersonalityType()));
 
         } catch (ParticipantFileException | InvalidParticipantDataException e) {
             System.out.println("Error while loading participants:");

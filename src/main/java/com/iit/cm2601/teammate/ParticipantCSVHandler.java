@@ -72,7 +72,7 @@ public class ParticipantCSVHandler {
                     RoleType roleType = RoleType.valueOf(rawRole);
                     PersonalityType personalityType = PersonalityType.valueOf(rawPersonality);
 
-                    // Basic range validation (you can tighten this if you want)
+                    // range validation
                     if (skillLevel < 1 || skillLevel > 10) {
                         throw new InvalidParticipantDataException(
                                 "SkillLevel out of range (1-10) at line " + lineNumber);
