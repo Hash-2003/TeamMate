@@ -55,7 +55,6 @@ public class ParticipantCSVHandler {
                     String name = fields[1].trim();
                     String email = fields[2].trim();
 
-                    // Normalize game and role strings so they match enum names
                     String rawGame = fields[3].trim().toUpperCase();
                     rawGame = rawGame.replace(" ", "_")
                             .replace(":", "_");

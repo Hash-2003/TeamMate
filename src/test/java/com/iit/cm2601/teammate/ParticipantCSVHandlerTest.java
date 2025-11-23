@@ -16,21 +16,15 @@ public class ParticipantCSVHandlerTest {
         try {
             List<Participant> participants = handler.loadParticipants(csvPath);
 
-            System.out.println("✅ Loaded " + participants.size() + " participants.");
+            System.out.println("Loaded " + participants.size() + " participants.");
 
 
             participants.stream()
-                    .limit(5)
-                    .forEach(p -> System.out.println(
-                            p.getId() + " | " +
-                                    p.getName() + " | " +
-                                    p.getPreferredGame() + " | " +
-                                    p.getPreferredRole() + " | " +
-                                    p.getPersonalityType()
-                    ));
+                    .limit(3)
+                    .forEach(p -> System.out.println(p.getId() + " | " + p.getName() + " | " + p.getPreferredGame() + " | " + p.getPreferredRole() + " | " + p.getPersonalityType()));
 
         } catch (ParticipantFileException | InvalidParticipantDataException e) {
-            System.out.println("❌ Error while loading participants:");
+            System.out.println("Error while loading participants:");
             e.printStackTrace();
         }
     }
