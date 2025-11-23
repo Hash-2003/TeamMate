@@ -30,4 +30,23 @@ public class Participant {
 
     }
 
+    //Getters
+    public String getId() {return id;}
+    public String getName() {return name;}
+    public String getEmail() {return email;}
+    public GameType getPreferredGame() {return preferredGame;}
+    public int getSkillLevel() {return skillLevel;}
+    public RoleType getPreferredRole() {return preferredRole;}
+    public int getPersonalityScore() {return personalityScore;}
+    public PersonalityType getPersonalityType() {return personalityType;}
+
+    //Setters
+    public void setId(String id) {this.id = id;}
+    public void setName(String name) {this.name = name;}
+    public void setEmail(String email) {this.email = email;}
+    public void setPreferredGame(GameType preferredGame) {this.preferredGame = preferredGame;}
+    public void setSkillLevel(int skillLevel) {this.skillLevel = skillLevel;}
+    public void setPreferredRole(RoleType preferredRole) {this.preferredRole = preferredRole;}
+    public void setPersonalityScore(int personalityScore) {this.personalityScore = personalityScore;}
+    public void setPersonalityType(PersonalityType personalityType) {this.personalityType = personalityType;}
 }
