@@ -49,7 +49,7 @@ public class LoginViewController {
 
     @FXML
     private void onParticipantRegisterClicked(ActionEvent event) {
-        // For now this is a placeholder – you’ll implement later
+        // to be implemented
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Coming Soon");
         alert.setHeaderText("Participant Registration");
