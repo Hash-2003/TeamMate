@@ -97,9 +97,42 @@ public class ParticipantCSVHandler {
         return participants;
     }
 
-    /**
-     saveParticipant csv to be added
-     */
+    private String safe(String value) {
+        return value == null ? "" : value;
+    }
+
+
+    public void saveParticipantsToCsv(List<Participant> participants, String csvPath)
+            throws ParticipantFileException {
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvPath))) {
+
+            //header
+            bw.write("ID,Name,Email,PreferredGame,SkillLevel,PreferredRole,PersonalityScore,PersonalityType");
+            bw.newLine();
+
+
+            for (Participant p : participants) {
+                String line = String.join(",",
+                        safe(p.getId()),
+                        safe(p.getName()),
+                        safe(p.getEmail()),
+                        p.getPreferredGame().name(),
+                        String.valueOf(p.getSkillLevel()),
+                        p.getPreferredRole().name(),
+                        String.valueOf(p.getPersonalityScore()),
+                        p.getPersonalityType().name()
+                );
+                bw.write(line);
+                bw.newLine();
+            }
+
+        } catch (IOException e) {
+            throw new ParticipantFileException(
+                    "Error writing to CSV file: " + csvPath, e
+            );
+        }
+    }
 
 
 
