@@ -28,12 +28,12 @@ public class LoginViewController {
         try {
 
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/admin-view.fxml")
+                    getClass().getResource("/com/iit/cm2601/teammate/admin-view.fxml")
             );
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("Admin Dashboard");
+            stage.setTitle("Login");
             stage.setScene(new Scene(root));
             stage.show();
 
