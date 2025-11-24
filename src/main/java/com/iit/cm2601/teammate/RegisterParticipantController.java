@@ -178,8 +178,24 @@ public class RegisterParticipantController {
 
     @FXML
     private void onCancelClicked() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+        Stage currentStage = (Stage) cancelButton.getScene().getWindow();
+        currentStage.close();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/iit/cm2601/teammate/login-view.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("TeamMate - Sports Team Builder");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            showError("Error", "Unable to return to Login screen.");
+            e.printStackTrace();
+        }
     }
 
     private void clearForm() {
