@@ -49,12 +49,25 @@ public class LoginViewController {
 
     @FXML
     private void onParticipantRegisterClicked(ActionEvent event) {
-        // to be implemented
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Coming Soon");
-        alert.setHeaderText("Participant Registration");
-        alert.setContentText("Registration feature will be implemented later.");
-        alert.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/iit/cm2601/teammate/register-participant.fxml")
+            );
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Participant Registration");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage currentStage = (Stage) participantRegisterBtn.getScene().getWindow();
+            currentStage.close();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        showError("Unable to open Admin view.",
+                "Please check that admin-view.fxml exists and the path is correct.");
+    }
     }
 
     @FXML
