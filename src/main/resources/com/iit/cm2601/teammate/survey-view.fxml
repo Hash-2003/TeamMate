@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.iit.cm2601.teammate.SurveyController"
+      spacing="10">
+
+    <padding>
+        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+    </padding>
+
+    <children>
+
+        <!-- Title -->
+        <Label text="Personality Survey [1 (Strongly Disagree) to 5 (Strongly Agree)]">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+
+        <!-- Questions -->
+        <GridPane hgap="10.0" vgap="8.0">
+
+            <!-- Q1 -->
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   wrapText="true" prefWidth="320.0"
+                   text="Q1: I enjoy taking the lead and guiding others during group activities."/>
+            <Spinner fx:id="q1Spinner" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <!-- Q2 -->
+            <Label GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   wrapText="true" prefWidth="320.0"
+                   text="Q2: I prefer analyzing situations and coming up with strategic solutions."/>
+            <Spinner fx:id="q2Spinner" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <!-- Q3 -->
+            <Label GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   wrapText="true" prefWidth="320.0"
+                   text="Q3: I work well with others and enjoy collaborative teamwork."/>
+            <Spinner fx:id="q3Spinner" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <!-- Q4 -->
+            <Label GridPane.rowIndex="3" GridPane.columnIndex="0"
+                   wrapText="true" prefWidth="320.0"
+                   text="Q4: I am calm under pressure and can help maintain team morale."/>
+            <Spinner fx:id="q4Spinner" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <!-- Q5 -->
+            <Label GridPane.rowIndex="4" GridPane.columnIndex="0"
+                   wrapText="true" prefWidth="320.0"
+                   text="Q5: I like making quick decisions and adapting in dynamic situations."/>
+            <Spinner fx:id="q5Spinner" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+        <!-- Buttons -->
+        <HBox spacing="10.0">
+            <children>
+                <Button text="Calculate &amp; Apply" onAction="#onCalculateClicked"/>
+                <Button text="Cancel" onAction="#onCancelClicked"/>
+            </children>
+        </HBox>
+
+    </children>
+</VBox>
