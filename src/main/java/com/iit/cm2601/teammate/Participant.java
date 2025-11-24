@@ -30,6 +30,13 @@ public class Participant {
 
     }
 
+    @Override
+    public String toString() {
+        return id + " | " + name + " | " + email + " |" + preferredGame + skillLevel + " |" +" | " + preferredRole +
+                " | " + personalityType + " (" + personalityScore + ")";
+    }
+
+
     //Getters
     public String getId() {return id;}
     public String getName() {return name;}

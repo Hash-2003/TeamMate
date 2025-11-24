@@ -164,7 +164,7 @@ public class RegisterParticipantController {
             participants.add(newParticipant);
             csvHandler.saveParticipantsToCsv(participants, PARTICIPANT_CSV_PATH);
 
-            showInfo("Success", "Participant registered successfully.");
+            showInfo("Success",newParticipant + " added successfully!");
             clearForm();
 
         } catch (ParticipantFileException | InvalidParticipantDataException e) {
