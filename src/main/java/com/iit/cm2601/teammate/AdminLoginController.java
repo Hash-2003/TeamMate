@@ -26,7 +26,7 @@ public class AdminLoginController {
     @FXML
     private Button cancelButton;
 
-    private static final String AdminUsername = "admin@uni.edu";
+    private static final String AdminUsername = "adminsports@uni.edu";
 
     private static final String AdminSalt = "KieBLac30YTJ34RKOfJKCg==";
     private static final String AdminHash = "Y5HwePRwV91vHsdvPSfEhhUzwrbV/RKmULipfPgOoa4=";
@@ -55,11 +55,6 @@ public class AdminLoginController {
             return;
         }
 
-        showInfo("Login Successful", "Welcome, admin!");
-
-
-        // Admin Dashbord will be implemented
-        /*
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/iit/cm2601/teammate/admin-dashboard.fxml"));
@@ -70,7 +65,6 @@ public class AdminLoginController {
             stage.setScene(new Scene(root));
             stage.show();
 
-            // Close the login window
             Stage currentStage = (Stage) loginButton.getScene().getWindow();
             currentStage.close();
 
@@ -78,7 +72,6 @@ public class AdminLoginController {
             showError("Error", "Unable to open Admin Dashboard.");
             e.printStackTrace();
         }
-        */
     }
 
     @FXML
