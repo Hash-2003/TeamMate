@@ -107,12 +107,4 @@ public class AdminLoginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    private void showInfo(String header, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(header);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

@@ -50,10 +50,6 @@ public class AdminDashboardController {
     private final ParticipantCSVHandler csvHandler = new ParticipantCSVHandler();
     private final ObservableList<Participant> participantData = FXCollections.observableArrayList();
 
-    // Default CSV path
-    private static final String DEFAULT_CSV_PATH =
-            "src/main/resources/com/iit/cm2601/teammate/data/participant_details.csv";
-
     @FXML
     private void initialize() {
         // Setup table columns → must match Participant getters
@@ -65,9 +61,6 @@ public class AdminDashboardController {
         colPersonality.setCellValueFactory(new PropertyValueFactory<>("personalityType"));
 
         participantTable.setItems(participantData);
-
-        // Try loading default CSV
-        loadParticipants(DEFAULT_CSV_PATH);
     }
 
     @FXML
