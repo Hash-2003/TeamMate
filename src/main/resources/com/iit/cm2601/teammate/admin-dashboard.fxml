@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iit.cm2601.teammate.AdminDashboardController">
+
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <children>
+                <Button fx:id="importCsvButton" text="Import CSV" onAction="#onImportCsv"/>
+                <Label text="Team Size:"/>
+                <Spinner fx:id="teamSizeSpinner" prefWidth="80"/>
+                <Button fx:id="formTeamsButton" text="Form Teams" onAction="#onFormTeams"/>
+                <Button fx:id="exportTeamsButton" text="Export Teams" onAction="#onExportTeams"/>
+                <Button fx:id="logoutButton" text="Logout" style="-fx-background-color: #d9534f; -fx-text-fill: white;" onAction="#onLogout"/>
+            </children>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <children>
+                <Label text="Participants">
+                    <font><Font name="System Bold" size="16"/></font>
+                </Label>
+
+                <TableView fx:id="participantTable" prefWidth="500">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colName" text="Name" prefWidth="120"/>
+                        <TableColumn fx:id="colGame" text="Game" prefWidth="100"/>
+                        <TableColumn fx:id="colRole" text="Role" prefWidth="100"/>
+                        <TableColumn fx:id="colSkill" text="Skill" prefWidth="60"/>
+                        <TableColumn fx:id="colPersonality" text="Personality" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <children>
+                <Label text="Formed Teams">
+                    <font><Font name="System Bold" size="16"/></font>
+                </Label>
+                <TextArea fx:id="teamOutputArea" wrapText="true" prefHeight="500"/>
+            </children>
+        </VBox>
+    </center>
+
+</BorderPane>
