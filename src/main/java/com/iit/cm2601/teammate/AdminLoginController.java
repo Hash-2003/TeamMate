@@ -26,7 +26,7 @@ public class AdminLoginController {
     @FXML
     private Button cancelButton;
 
-    private static final String AdminUsername = "adminsports@uni.edu";
+    private static final String AdminUsername = "adminsports";
 
     private static final String AdminSalt = "KieBLac30YTJ34RKOfJKCg==";
     private static final String AdminHash = "Y5HwePRwV91vHsdvPSfEhhUzwrbV/RKmULipfPgOoa4=";
