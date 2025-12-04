@@ -2,6 +2,7 @@ package com.iit.cm2601.teammate;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TeamBuilder {
     private final List<Participant> allParticipants;
@@ -15,6 +16,13 @@ public class TeamBuilder {
 
     private double globalAvgSkill = 0.0;
     private final int baseGameCap = 2;
+
+    private static final double WGame  = 5.0;
+    private static final double WRole  = 4.0;
+    private static final double WPres  = 3.0;
+    private static final double WSkill = 1.0;
+
+    private static final double BigPanelty = 1000.0;
 
     public TeamBuilder(List<Participant> allParticipants, int targetTeamSize) {
         this.allParticipants = new ArrayList<>(allParticipants);
@@ -188,6 +196,127 @@ public class TeamBuilder {
         }
     }
 
+    private List<Participant> collectUnassignedParticipants() {
+        List<Participant> remaining = new ArrayList<>();
+
+        for (Participant p : allParticipants) {
+            if (!isAlreadyAssigned(p)) {
+                remaining.add(p);
+            }
+        }
+
+        return remaining;
+    }
+
+    private double computeGamePenalty(Participant p, Team t) {
+        GameType game = p.getPreferredGame();
+        int count = t.getGameCount(game);
+
+        if (count >= baseGameCap) {
+            return BigPanelty;
+        }
+        return 0.0;
+    }
+
+    private double computeRolePenalty(Participant p, Team t) {
+        int current = t.getDistinctRoleCount();
+        int after = t.getDistinctRoleCountWith(p.getPreferredRole());
+
+        int cap = t.getTargetCapacity();
+        int target = (cap <= 5) ? 3 : 4;
+
+        if (after > current) return 0.0;
+
+        if (t.getCurrentSize() >= cap - 1 && current < target) {
+            return 5.0;
+        }
+
+        return 1.0;
+    }
+
+    private double computePersonalityPenalty(Participant p, Team t) {
+        int L = t.getPersonalityCount(PersonalityType.LEADER);
+        int Th = t.getPersonalityCount(PersonalityType.THINKER);
+
+        PersonalityType type = p.getPersonalityType();
+        if (type == PersonalityType.LEADER) L++;
+        else if (type == PersonalityType.THINKER) Th++;
+
+        int cap = t.getTargetCapacity();
+
+        int maxTh = maxThinkersForCapacity(cap);
+
+        double penalty = 0.0;
+
+        if (L == 0) penalty += 3.0;
+        if (L > 2) penalty += 5.0;
+
+        // Thinker penalties
+        if (Th == 0) penalty += 2.0;
+        if (Th > maxTh) penalty += 4.0;
+
+        return penalty;
+    }
+
+    private double computeSkillPenalty(Participant p, Team t) {
+        double newAvg = (t.getTotalSkill() + p.getSkillLevel())
+                / (double) (t.getCurrentSize() + 1);
+
+        return Math.abs(newAvg - globalAvgSkill);
+    }
+
+    private double scorePlacement(Participant p, Team t) {
+        double gamePenalty = computeGamePenalty(p, t);
+        double rolePenalty = computeRolePenalty(p, t);
+        double persPenalty = computePersonalityPenalty(p, t);
+        double skillPenalty = computeSkillPenalty(p, t);
+
+        return WGame * gamePenalty
+                + WRole * rolePenalty
+                + WPres * persPenalty
+                + WSkill * skillPenalty;
+    }
+
+    private void assignRemainingParticipants() {
+
+        List<Participant> remaining = collectUnassignedParticipants();
+
+        remaining.sort((a, b) -> Integer.compare(b.getSkillLevel(), a.getSkillLevel()));
+
+        for (Participant p : remaining) {
+
+            Team bestTeam = null;
+            double bestScore = Double.MAX_VALUE;
+            List<Team> bestTeamsList = new ArrayList<>();
+
+            for (Team t : teams) {
+
+                if (t.isFull()) continue;
+
+                double score = scorePlacement(p, t);
+
+                if (score < bestScore) {
+                    bestScore = score;
+                    bestTeamsList.clear();
+                    bestTeamsList.add(t);
+                }
+                else if (Math.abs(score - bestScore) < 1e-9) {
+                    bestTeamsList.add(t);
+                }
+            }
+
+            if (!bestTeamsList.isEmpty()) {
+                Team chosen = bestTeamsList.get(
+                        new Random().nextInt(bestTeamsList.size())
+                );
+                chosen.addMember(p);
+            }
+            else {
+                System.out.println("Warning: No placement found for " + p.getId());
+            }
+        }
+    }
+
     public List<Team> formTeams() {
         initializeTeamsWithCapacities();
         initializeTeamsWithCapacities();
@@ -196,6 +325,7 @@ public class TeamBuilder {
 
         seedLeaders();
         seedThinkers();
+        assignRemainingParticipants();
 
         System.out.println("Leaders: " + leaders.size());
         System.out.println("Thinkers: " + thinkers.size());
