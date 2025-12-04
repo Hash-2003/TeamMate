@@ -17,7 +17,7 @@ public class TeamBuilder {
 
     private static final double WGame  = 5.0;
     private static final double WRole  = 4.0;
-    private static final double WPres  = 3.0;
+    private static final double WPres  = 2.0;
     private static final double WSkill = 1.0;
 
     private static final double BigPanelty = 1000.0;

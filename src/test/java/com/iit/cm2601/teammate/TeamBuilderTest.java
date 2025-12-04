@@ -32,7 +32,8 @@ public class TeamBuilderTest {
                 totalAssigned += t.getCurrentSize();
                 System.out.println("Team " + t.getTeamId()
                         + " -> cap=" + t.getTargetCapacity()
-                        + ", size=" + t.getCurrentSize());
+                        + ", size=" + t.getCurrentSize()
+                        + ", avgSkill=" + String.format("%.2f", t.getAvgSkill()));
             }
 
             System.out.println("Sum of team capacities = " + sumCapacities

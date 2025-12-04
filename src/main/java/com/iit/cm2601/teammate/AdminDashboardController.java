@@ -4,6 +4,7 @@ import com.iit.cm2601.teammate.exceptions.InvalidParticipantDataException;
 import com.iit.cm2601.teammate.exceptions.ParticipantFileException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.FileChooser;
@@ -12,8 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +32,9 @@ public class AdminDashboardController {
 
     @FXML
     private TableView<Participant> participantTable;
+
+    @FXML
+    private Button exportTeamsButton;
 
     @FXML
     private TableColumn<Participant, String> colId;
@@ -122,10 +128,29 @@ public class AdminDashboardController {
             return;
         }
 
-        try {
-            TeamBuilder builder = new TeamBuilder(participants, teamSize);
-            teams = builder.formTeams();
-            
+        importCsvButton.setDisable(true);
+        logoutButton.setDisable(true);
+        teamSizeSpinner.setDisable(true);
+        exportTeamsButton.setDisable(true);
+
+        teamOutputArea.clear();
+        teamOutputArea.appendText("Forming teams, please wait...\n");
+
+        Task<List<Team>> teamTask = new Task<>() {
+            @Override
+            protected List<Team> call() {
+                TeamBuilder builder = new TeamBuilder(participants, teamSize);
+                return builder.formTeams();   // heavy work here
+            }
+        };
+
+        teamTask.setOnSucceeded(event -> {
+            teams = teamTask.getValue();
+            importCsvButton.setDisable(false);
+            logoutButton.setDisable(false);
+            teamSizeSpinner.setDisable(false);
+            exportTeamsButton.setDisable(false);
+
             StringBuilder sb = new StringBuilder();
             sb.append("Teams formed successfully.\n");
             sb.append("Team size target: ").append(teamSize).append("\n");
@@ -152,12 +177,24 @@ public class AdminDashboardController {
             teamOutputArea.setText(sb.toString());
 
             showInfo("Teams Formed", "Teams have been formed successfully.");
+        });
+        teamTask.setOnFailed(event -> {
+            importCsvButton.setDisable(false);
+            logoutButton.setDisable(false);
+            teamSizeSpinner.setDisable(false);
+            exportTeamsButton.setDisable(false);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            Throwable ex = teamTask.getException();
+            ex.printStackTrace();
+
             showError("Team Formation Error",
-                    "An error occurred while forming teams: " + e.getMessage());
-        }
+                    "An error occurred while forming teams: " +
+                            (ex != null ? ex.getMessage() : "Unknown error"));
+        });
+
+        Thread t = new Thread(teamTask);
+        t.setDaemon(true);
+        t.start();
     }
 
     @FXML
