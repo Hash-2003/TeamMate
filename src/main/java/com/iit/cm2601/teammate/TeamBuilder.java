@@ -17,8 +17,8 @@ public class TeamBuilder {
 
     private static final double WGame  = 5.0;
     private static final double WRole  = 4.0;
-    private static final double WPres  = 2.0;
-    private static final double WSkill = 1.0;
+    private static final double WPres  = 3.0;
+    private static final double WSkill = 3.0;
 
     private static final double BigPanelty = 1000.0;
 
@@ -257,10 +257,25 @@ public class TeamBuilder {
     }
 
     private double computeSkillPenalty(Participant p, Team t) {
-        double newAvg = (t.getTotalSkill() + p.getSkillLevel())
-                / (double) (t.getCurrentSize() + 1);
 
-        return Math.abs(newAvg - globalAvgSkill);
+        int newTotalSkill = t.getTotalSkill() + p.getSkillLevel();
+        int newSize = t.getCurrentSize() + 1;
+
+        double newAvg = (double) newTotalSkill / newSize;
+
+        double diff = Math.abs(newAvg - globalAvgSkill);
+
+        double penalty = diff * diff;
+
+        double currentAvg = t.getCurrentSize() == 0
+                ? globalAvgSkill
+                : t.getAvgSkill();
+
+        if (currentAvg < globalAvgSkill) {
+            penalty *= 0.8;
+        }
+
+        return penalty;
     }
 
     private double scorePlacement(Participant p, Team t) {
