@@ -76,15 +76,17 @@ public class SurveyController {
             return;
         }
 
+        int q1 = q1Spinner.getValue();
+        int q2 = q2Spinner.getValue();
+        int q3 = q3Spinner.getValue();
+        int q4 = q4Spinner.getValue();
+        int q5 = q5Spinner.getValue();
+
         Task<Void> surveyTask = new Task<>() {
             @Override
             protected Void call() {
 
-                int total = q1Spinner.getValue()
-                        + q2Spinner.getValue()
-                        + q3Spinner.getValue()
-                        + q4Spinner.getValue()
-                        + q5Spinner.getValue();
+                int total = q1 + q2 + q3 + q4 + q5;
 
                 int scaledScore = total * 4;
 
