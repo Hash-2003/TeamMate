@@ -14,10 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
