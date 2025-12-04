@@ -17,7 +17,7 @@ public class TeamBuilderTest {
             List<Participant> participants = handler.loadParticipants(csvPath);
             System.out.println("Loaded " + participants.size() + " participants.");
 
-            int teamSize = 4;
+            int teamSize = 3;
 
             TeamBuilder builder = new TeamBuilder(participants, teamSize);
             List<Team> teams = builder.formTeams();

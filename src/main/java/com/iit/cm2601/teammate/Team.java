@@ -94,7 +94,25 @@ public class Team {
         personalityCounts.put(p, personalityCounts.getOrDefault(p, 0) + 1);
     }
 
-    //removeMember will be added if I decide to implement swapping
+    //swapping needs to be improved. Then remove method is not needed
+/*
+    public void removeMember(Participant participant) {
+        if (members.remove(participant)) {
+
+            totalSkill -= participant.getSkillLevel();
+
+            GameType g = participant.getPreferredGame();
+            gameCounts.put(g, gameCounts.getOrDefault(g, 0) - 1);
+
+            RoleType r = participant.getPreferredRole();
+            roleCounts.put(r, roleCounts.getOrDefault(r, 0) - 1);
+
+            PersonalityType p = participant.getPersonalityType();
+            personalityCounts.put(p, personalityCounts.getOrDefault(p, 0) - 1);
+        }
+    }
+*/
+
 
     @Override
     public String toString() {

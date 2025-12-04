@@ -1,8 +1,6 @@
 package com.iit.cm2601.teammate;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class TeamBuilder {
     private final List<Participant> allParticipants;
@@ -73,9 +71,9 @@ public class TeamBuilder {
             }
         }
 
-        java.util.Collections.shuffle(leaders);
-        java.util.Collections.shuffle(thinkers);
-        java.util.Collections.shuffle(balanced);
+        Collections.shuffle(leaders);
+        Collections.shuffle(thinkers);
+        Collections.shuffle(balanced);
     }
 
     private void computeGlobalSkillStatistics() {
