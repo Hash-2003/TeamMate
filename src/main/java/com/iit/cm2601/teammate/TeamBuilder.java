@@ -120,36 +120,6 @@ public class TeamBuilder {
                 bestTeam.addMember(leader);
             }
         }
-        for (Participant leader : leaders) {
-
-            if (isAlreadyAssigned(leader)) {
-                continue;
-            }
-
-            Team bestTeam = null;
-            int bestTotalSkill = Integer.MAX_VALUE;
-
-            for (Team team : teams) {
-                if (team.isFull()) {
-                    continue;
-                }
-
-                GameType game = leader.getPreferredGame();
-                int currentGameCount = team.getGameCount(game);
-                if (currentGameCount >= baseGameCap) {
-                    continue;
-                }
-
-                if (team.getTotalSkill() < bestTotalSkill) {
-                    bestTotalSkill = team.getTotalSkill();
-                    bestTeam = team;
-                }
-            }
-
-            if (bestTeam != null) {
-                bestTeam.addMember(leader);
-            }
-        }
     }
 
     private boolean isAlreadyAssigned(Participant p) {
@@ -161,12 +131,71 @@ public class TeamBuilder {
         return false;
     }
 
+    private int maxThinkersForCapacity(int capacity) {
+        if (capacity <= 5) {
+            return 2;    // small
+        } else if (capacity <= 7) {
+            return 3;    // medium
+        } else {
+            return 4;    // large
+        }
+    }
+
+    private void seedThinkers() {
+        if (thinkers.isEmpty()) {
+            return;
+        }
+        for (Participant thinker : thinkers) {
+
+            Team bestTeam = null;
+            int bestThinkerCount = Integer.MAX_VALUE;
+            int bestTotalSkill = Integer.MAX_VALUE;
+
+            for (Team team : teams) {
+                if (team.isFull()) {
+                    continue;
+                }
+
+                int currentThinkers = team.getPersonalityCount(PersonalityType.THINKER);
+                int maxAllowed = maxThinkersForCapacity(team.getTargetCapacity());
+
+                if (currentThinkers >= maxAllowed) {
+                    continue;
+                }
+
+                GameType game = thinker.getPreferredGame();
+                if (team.getGameCount(game) >= baseGameCap) {
+                    continue;
+                }
+
+
+                if (currentThinkers < bestThinkerCount) {
+                    bestThinkerCount = currentThinkers;
+                    bestTotalSkill = team.getTotalSkill();
+                    bestTeam = team;
+                }
+
+                else if (currentThinkers == bestThinkerCount &&
+                        team.getTotalSkill() < bestTotalSkill) {
+                    bestTotalSkill = team.getTotalSkill();
+                    bestTeam = team;
+                }
+            }
+
+            if (bestTeam != null) {
+                bestTeam.addMember(thinker);
+            }
+        }
+    }
+
     public List<Team> formTeams() {
         initializeTeamsWithCapacities();
         initializeTeamsWithCapacities();
         bucketParticipantsByPersonality();
         computeGlobalSkillStatistics();
+
         seedLeaders();
+        seedThinkers();
 
         System.out.println("Leaders: " + leaders.size());
         System.out.println("Thinkers: " + thinkers.size());
@@ -177,7 +206,10 @@ public class TeamBuilder {
             int leaderCount = t.getPersonalityCount(PersonalityType.LEADER);
             System.out.println("Team " + t.getTeamId()
                     + " -> leaders=" + leaderCount
-                    + ", size=" + t.getCurrentSize());
+                    +" | thinkers=" + t.getPersonalityCount(PersonalityType.THINKER)
+                    + ", size=" + t.getCurrentSize()
+                    +" | cap=" + t.getTargetCapacity()
+            );
         }
         //developments will be added
 
