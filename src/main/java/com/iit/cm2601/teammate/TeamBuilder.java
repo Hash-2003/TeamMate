@@ -14,6 +14,7 @@ public class TeamBuilder {
     private final List<Participant> balanced  = new ArrayList<>();
 
     private double globalAvgSkill = 0.0;
+    private final int baseGameCap = 2;
 
     public TeamBuilder(List<Participant> allParticipants, int targetTeamSize) {
         this.allParticipants = new ArrayList<>(allParticipants);
@@ -83,16 +84,101 @@ public class TeamBuilder {
         globalAvgSkill = (double) totalSkill / allParticipants.size();
     }
 
+    private void seedLeaders() {
+        if (leaders.isEmpty()) {
+            return;
+        }
+
+        for (Participant leader : leaders) {
+
+            Team bestTeam = null;
+            int bestTotalSkill = Integer.MAX_VALUE;
+
+            for (Team team : teams) {
+                if (team.isFull()) {
+                    continue;
+                }
+
+                int leaderCountInTeam = team.getPersonalityCount(PersonalityType.LEADER);
+                if (leaderCountInTeam > 0) {
+                    continue;
+                }
+
+                GameType game = leader.getPreferredGame();
+                int currentGameCount = team.getGameCount(game);
+                if (currentGameCount >= baseGameCap) {
+                    continue;
+                }
+
+                if (team.getTotalSkill() < bestTotalSkill) {
+                    bestTotalSkill = team.getTotalSkill();
+                    bestTeam = team;
+                }
+            }
+
+            if (bestTeam != null) {
+                bestTeam.addMember(leader);
+            }
+        }
+        for (Participant leader : leaders) {
+
+            if (isAlreadyAssigned(leader)) {
+                continue;
+            }
+
+            Team bestTeam = null;
+            int bestTotalSkill = Integer.MAX_VALUE;
+
+            for (Team team : teams) {
+                if (team.isFull()) {
+                    continue;
+                }
+
+                GameType game = leader.getPreferredGame();
+                int currentGameCount = team.getGameCount(game);
+                if (currentGameCount >= baseGameCap) {
+                    continue;
+                }
+
+                if (team.getTotalSkill() < bestTotalSkill) {
+                    bestTotalSkill = team.getTotalSkill();
+                    bestTeam = team;
+                }
+            }
+
+            if (bestTeam != null) {
+                bestTeam.addMember(leader);
+            }
+        }
+    }
+
+    private boolean isAlreadyAssigned(Participant p) {
+        for (Team team : teams) {
+            if (team.getMembers().contains(p)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Team> formTeams() {
         initializeTeamsWithCapacities();
         initializeTeamsWithCapacities();
         bucketParticipantsByPersonality();
         computeGlobalSkillStatistics();
+        seedLeaders();
 
         System.out.println("Leaders: " + leaders.size());
         System.out.println("Thinkers: " + thinkers.size());
         System.out.println("Balanced: " + balanced.size());
         System.out.println("Global average skill: " + globalAvgSkill);
+
+        for (Team t : teams) {
+            int leaderCount = t.getPersonalityCount(PersonalityType.LEADER);
+            System.out.println("Team " + t.getTeamId()
+                    + " -> leaders=" + leaderCount
+                    + ", size=" + t.getCurrentSize());
+        }
         //developments will be added
 
         return teams;

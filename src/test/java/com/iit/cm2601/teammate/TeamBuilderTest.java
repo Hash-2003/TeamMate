@@ -17,7 +17,7 @@ public class TeamBuilderTest {
             List<Participant> participants = handler.loadParticipants(csvPath);
             System.out.println("Loaded " + participants.size() + " participants.");
 
-            int teamSize = 5; // try 3, 4, 5, 6, etc.
+            int teamSize = 10; // try 3, 4, 5, 6, etc.
 
             TeamBuilder builder = new TeamBuilder(participants, teamSize);
             List<Team> teams = builder.formTeams();
@@ -32,6 +32,7 @@ public class TeamBuilderTest {
                         "Team " + t.getTeamId()
                                 + " -> targetCapacity = " + t.getTargetCapacity()
                                 + ", currentSize = " + t.getCurrentSize()
+                                + ", leaders = " + t.getPersonalityCount(PersonalityType.LEADER)
                 );
             }
 
