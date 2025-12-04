@@ -327,21 +327,44 @@ public class TeamBuilder {
         seedThinkers();
         assignRemainingParticipants();
 
-        System.out.println("Leaders: " + leaders.size());
-        System.out.println("Thinkers: " + thinkers.size());
-        System.out.println("Balanced: " + balanced.size());
-        System.out.println("Global average skill: " + globalAvgSkill);
+        System.out.println("=== Team Formation Summary ===");
+        System.out.println("Total participants: " + allParticipants.size());
+        System.out.println("Target team size (UI): " + targetTeamSize);
+        System.out.println("Global average skill: " + String.format("%.2f", globalAvgSkill));
+        System.out.println("Leaders: " + leaders.size()
+                + ", Thinkers: " + thinkers.size()
+                + ", Balanced: " + balanced.size());
+        System.out.println("----------------------------------------");
+
+        int totalAssigned = 0;
+        int totalSkillAllTeams = 0;
 
         for (Team t : teams) {
-            int leaderCount = t.getPersonalityCount(PersonalityType.LEADER);
+            int size = t.getCurrentSize();
+            int cap = t.getTargetCapacity();
+            double avgSkill = t.getAvgSkill();
+
+            int leadersCount = t.getPersonalityCount(PersonalityType.LEADER);
+            int thinkersCount = t.getPersonalityCount(PersonalityType.THINKER);
+            int balancedCount = t.getPersonalityCount(PersonalityType.BALANCED);
+
+            totalAssigned += size;
+            totalSkillAllTeams += t.getTotalSkill();
+
             System.out.println("Team " + t.getTeamId()
-                    + " -> leaders=" + leaderCount
-                    +" | thinkers=" + t.getPersonalityCount(PersonalityType.THINKER)
-                    + ", size=" + t.getCurrentSize()
-                    +" | cap=" + t.getTargetCapacity()
-            );
+                    + " | size=" + size + "/" + cap
+                    + " | avgSkill=" + String.format("%.2f", avgSkill)
+                    + " | L=" + leadersCount
+                    + ", Th=" + thinkersCount
+                    + ", B=" + balancedCount
+                    + " | distinctRoles=" + t.getDistinctRoleCount());
         }
-        //developments will be added
+
+        System.out.println("----------------------------------------");
+        System.out.println("Total assigned: " + totalAssigned
+                + " (should equal participants: " + allParticipants.size() + ")");
+        System.out.println("Combined team skill: " + totalSkillAllTeams);
+        System.out.println("=== End of Team Formation Summary ===");
 
         return teams;
     }

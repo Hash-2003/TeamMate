@@ -26,20 +26,20 @@ public class TeamBuilderTest {
                     + " teams (target team size = " + teamSize + ").");
 
             int sumCapacities = 0;
+            int totalAssigned = 0;
             for (Team t : teams) {
                 sumCapacities += t.getTargetCapacity();
-                System.out.println(
-                        "Team " + t.getTeamId()
-                                + " -> targetCapacity = " + t.getTargetCapacity()
-                                + ", currentSize = " + t.getCurrentSize()
-                                + ", leaders = " + t.getPersonalityCount(PersonalityType.LEADER)
-                                + ", thinkers = " + t.getPersonalityCount(PersonalityType.THINKER)
-                );
+                totalAssigned += t.getCurrentSize();
+                System.out.println("Team " + t.getTeamId()
+                        + " -> cap=" + t.getTargetCapacity()
+                        + ", size=" + t.getCurrentSize());
             }
 
             System.out.println("Sum of team capacities = " + sumCapacities
-                    + " (participants = " + participants.size() + ")");
-
+                    + " (should be >= participants: " + participants.size() + ")");
+            System.out.println("Total assigned = " + totalAssigned
+                    + " (should equal participants: " + participants.size() + ")");
+            System.out.println("=== End External Check ===");
 
         } catch (ParticipantFileException | InvalidParticipantDataException e) {
             System.out.println("Error while loading participants:");
