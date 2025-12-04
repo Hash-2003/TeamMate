@@ -56,6 +56,7 @@ public class AdminDashboardController {
 
     private final ParticipantCSVHandler csvHandler = new ParticipantCSVHandler();
     private final ObservableList<Participant> participantData = FXCollections.observableArrayList();
+    private final TeamCSVHandler teamCsvHandler = new TeamCSVHandler();
 
     private List<Participant> participants = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
@@ -104,12 +105,6 @@ public class AdminDashboardController {
             showError("Error Loading CSV", e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void onExportTeams() {
-        // team formation algorithm to be implemented
-        showInfo("Not implemented", "Team exporting algorithm will be added later.");
     }
 
     @FXML
@@ -162,6 +157,39 @@ public class AdminDashboardController {
             e.printStackTrace();
             showError("Team Formation Error",
                     "An error occurred while forming teams: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onExportTeams() {
+        if (teams == null || teams.isEmpty()) {
+            showError("No Teams",
+                    "Please form teams before exporting.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Teams to CSV");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+
+        Stage stage = (Stage) importCsvButton.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file == null) {
+            // user cancelled
+            return;
+        }
+
+        try {
+            teamCsvHandler.saveTeamsToCsv(teams, file.getAbsolutePath());
+            showInfo("Export Successful",
+                    "Teams exported to:\n" + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Export Error",
+                    "Failed to export teams: " + e.getMessage());
         }
     }
 

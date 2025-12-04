@@ -9,16 +9,17 @@ public class TeamCSVHandler {
 
         try (FileWriter writer = new FileWriter(filePath)) {
 
-            writer.write("TeamID,ParticipantID,Name,PreferredGame,PreferredRole,SkillLevel,PersonalityType\n");
+            writer.write("TeamID,ParticipantID,Name,Email,PreferredGame,PreferredRole,SkillLevel,PersonalityType\n");
 
             for (Team team : teams) {
                 for (Participant p : team.getMembers()) {
 
                     String row = String.format(
-                            "%d,%s,%s,%s,%s,%d,%s\n",
+                            "%d,%s,%s,%s,%s,%s,%d,%s%n",
                             team.getTeamId(),
                             p.getId(),
                             escapeCsv(p.getName()),
+                            escapeCsv(p.getEmail()),
                             p.getPreferredGame(),
                             p.getPreferredRole(),
                             p.getSkillLevel(),
