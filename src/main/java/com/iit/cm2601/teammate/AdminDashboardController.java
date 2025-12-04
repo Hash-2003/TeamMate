@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDashboardController {
@@ -45,14 +46,23 @@ public class AdminDashboardController {
     private TableColumn<Participant, Integer> colSkill;
 
     @FXML
+    private TextArea teamOutputArea;
+
+    @FXML
     private TableColumn<Participant, PersonalityType> colPersonality;
+
+    @FXML
+    private Spinner<Integer> teamSizeSpinner;
 
     private final ParticipantCSVHandler csvHandler = new ParticipantCSVHandler();
     private final ObservableList<Participant> participantData = FXCollections.observableArrayList();
 
+    private List<Participant> participants = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();
+
     @FXML
     private void initialize() {
-        // Setup table columns → must match Participant getters
+        // Setup table columns
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colGame.setCellValueFactory(new PropertyValueFactory<>("preferredGame"));
@@ -61,6 +71,11 @@ public class AdminDashboardController {
         colPersonality.setCellValueFactory(new PropertyValueFactory<>("personalityType"));
 
         participantTable.setItems(participantData);
+
+
+        teamSizeSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 10, 5)
+        );
     }
 
     @FXML
@@ -79,7 +94,7 @@ public class AdminDashboardController {
 
     private void loadParticipants(String path) {
         try {
-            List<Participant> participants = csvHandler.loadParticipants(path);
+            participants = csvHandler.loadParticipants(path);
             participantData.setAll(participants);
 
             showInfo("Loaded Participants",
@@ -92,15 +107,62 @@ public class AdminDashboardController {
     }
 
     @FXML
-    private void onFormTeams() {
+    private void onExportTeams() {
         // team formation algorithm to be implemented
-        showInfo("Not implemented", "Team formation algorithm will be added later.");
+        showInfo("Not implemented", "Team exporting algorithm will be added later.");
     }
 
     @FXML
-    private void onExportTeams() {
-        // to be implemented
-        showInfo("Not implemented", "Team export will be implemented later.");
+    private void onFormTeams() {
+        if (participants == null || participants.isEmpty()) {
+            showError("No Participants",
+                    "Please import or register participants before forming teams.");
+            return;
+        }
+
+        Integer teamSize = teamSizeSpinner.getValue();
+        if (teamSize == null || teamSize < 3 || teamSize > 10) {
+            showError("Invalid Team Size",
+                    "Please choose a team size between 3 and 10.");
+            return;
+        }
+
+        try {
+            TeamBuilder builder = new TeamBuilder(participants, teamSize);
+            teams = builder.formTeams();
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("Teams formed successfully.\n");
+            sb.append("Team size target: ").append(teamSize).append("\n");
+            sb.append("Total teams: ").append(teams.size()).append("\n\n");
+
+            for (Team t : teams) {
+                sb.append("Team ").append(t.getTeamId())
+                        .append(" (size=").append(t.getCurrentSize())
+                        .append(", avgSkill=").append(String.format("%.2f", t.getAvgSkill()))
+                        .append(")\n");
+
+                for (Participant p : t.getMembers()) {
+                    sb.append("  - ").append(p.getId())
+                            .append(" | ").append(p.getName())
+                            .append(" | ").append(p.getPreferredGame())
+                            .append(" | ").append(p.getPreferredRole())
+                            .append(" | Skill=").append(p.getSkillLevel())
+                            .append(" | ").append(p.getPersonalityType())
+                            .append("\n");
+                }
+                sb.append("\n");
+            }
+
+            teamOutputArea.setText(sb.toString());
+
+            showInfo("Teams Formed", "Teams have been formed successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Team Formation Error",
+                    "An error occurred while forming teams: " + e.getMessage());
+        }
     }
 
     @FXML
