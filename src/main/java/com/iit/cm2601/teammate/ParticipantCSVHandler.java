@@ -9,7 +9,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  Handles reading and writing Participant data to/from CSV files.
@@ -23,6 +25,8 @@ public class ParticipantCSVHandler {
             throws ParticipantFileException, InvalidParticipantDataException {
 
         List<Participant> participants = new ArrayList<>();
+
+        Set<String> seenIds = new HashSet<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
 
@@ -71,6 +75,12 @@ public class ParticipantCSVHandler {
                     GameType gameType = GameType.valueOf(rawGame);
                     RoleType roleType = RoleType.valueOf(rawRole);
                     PersonalityType personalityType = PersonalityType.valueOf(rawPersonality);
+
+                    if (seenIds.contains(id)) {
+                        throw new InvalidParticipantDataException(
+                                "Duplicate participant ID found in CSV: " + id);
+                    }
+                    seenIds.add(id);
 
                     // range validation
                     if (skillLevel < 1 || skillLevel > 10) {
