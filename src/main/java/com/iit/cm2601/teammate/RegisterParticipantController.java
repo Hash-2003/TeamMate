@@ -62,7 +62,7 @@ public class RegisterParticipantController {
 
 
         skillSpinner.setValueFactory(
-                new IntegerSpinnerValueFactory(1, 10, 5)
+                new IntegerSpinnerValueFactory(0, 10)
         );
 
         if (personalityScoreField != null) {
@@ -119,7 +119,7 @@ public class RegisterParticipantController {
             Integer skill = skillSpinner.getValue();
 
             if (id.isEmpty() || name.isEmpty() || email.isEmpty()
-                    || game == null || role == null) {
+                    || game == null || role == null || skill == 0) {
                 showError("Validation Error", "Please fill in all required fields.");
                 return;
             }

@@ -46,19 +46,19 @@ public class SurveyController {
     private void initialize() {
 
         q1Spinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0 )
         );
         q2Spinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0 )
         );
         q3Spinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0 )
         );
         q4Spinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0 )
         );
         q5Spinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0 )
         );
     }
 
@@ -66,11 +66,11 @@ public class SurveyController {
     private void onCalculateClicked() {
 
         // basic validation
-        if (q1Spinner.getValue() == null ||
-                q2Spinner.getValue() == null ||
-                q3Spinner.getValue() == null ||
-                q4Spinner.getValue() == null ||
-                q5Spinner.getValue() == null) {
+        if (q1Spinner.getValue() == 0 ||
+                q2Spinner.getValue() == 0 ||
+                q3Spinner.getValue() == 0 ||
+                q4Spinner.getValue() == 0 ||
+                q5Spinner.getValue() == 0) {
 
             showError("Validation Error", "Please answer all questions (Q1–Q5).");
             return;
